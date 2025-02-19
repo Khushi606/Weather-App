@@ -93,7 +93,7 @@ const App = () => {
         )}
         {loading && <div>Loading...</div>}
         {error && <div>Error: {error}</div>}
-        {weatherData && (
+        {!error && weatherData && (
           <div>
             <div className="city-name">
               <h2>
