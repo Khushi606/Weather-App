@@ -153,28 +153,52 @@ const App = () => {
               <div className="forecast">
                 <h3>5-Day Forecast:</h3>
                 <div className="forecast-container">
-                  {forecastData.list.slice(0, 5).map((item) => (
-                    <div className="day" key={item.dt}>
-                      <p className="day-name">
-                        {new Date(item.dt * 1000).toLocaleDateString("en-US", {
+                  {Object.values(
+                    forecastData.list.reduce((acc, item) => {
+                      // Get the day (e.g., "Wed, 17")
+                      const date = new Date(item.dt * 1000).toLocaleDateString(
+                        "en-US",
+                        {
                           weekday: "short",
-                        })}
-                      </p>
-                      <img
-                        className="day-icon"
-                        src={
-                          weatherIcons[weatherData.weather[0].main] ||
-                          weatherIcons.Default
                         }
-                        alt={item.weather[0].description}
-                      />
+                      );
 
-                      <p className="day-temperature">
-                        {Math.round(item.main.temp_min)}° /{" "}
-                        <span>{Math.round(item.main.temp_max)}°</span>
-                      </p>
-                    </div>
-                  ))}
+                      if (!acc[date]) {
+                        acc[date] = {
+                          min: item.main.temp_min,
+                          max: item.main.temp_max,
+                          icon: item.weather[0].main,
+                          date: date,
+                        };
+                      } else {
+                        acc[date].min = Math.min(
+                          acc[date].min,
+                          item.main.temp_min
+                        );
+                        acc[date].max = Math.max(
+                          acc[date].max,
+                          item.main.temp_max
+                        );
+                      }
+
+                      return acc;
+                    }, {})
+                  )
+                    .slice(0, 5) // Keep only 5 days
+                    .map((day, index) => (
+                      <div className="day" key={index}>
+                        <p className="day-name">{day.date}</p>
+                        <img
+                          className="day-icon"
+                          src={weatherIcons[day.icon] || weatherIcons.Default}
+                          alt={day.icon}
+                        />
+                        <p className="day-temperature">
+                          {Math.round(day.min)}° /{" "}
+                          <span>{Math.round(day.max)}°</span>
+                        </p>
+                      </div>
+                    ))}
                 </div>
               </div>
             )}
