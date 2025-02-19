@@ -27,7 +27,9 @@ const App = () => {
 
   const handleSearch = (searchedCity) => {
     setCity(searchedCity);
-    console.log(searchedCity);
+    setError(null); // Clear previous errors
+    setWeatherData(null); // Reset data on new search
+    setForecastData(null);
   };
 
   const formatDate = (date) => {
@@ -42,14 +44,15 @@ const App = () => {
 
   const currentDate = new Date();
   const formattedDate = formatDate(currentDate);
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${
-    import.meta.env.VITE_APP_ID
-  }`;
 
   useEffect(() => {
+    if (!city) return;
     const fetchWeatherData = async () => {
       setLoading(true);
       try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${
+          import.meta.env.VITE_APP_ID
+        }`;
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("City not found");
