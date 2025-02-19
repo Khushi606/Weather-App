@@ -10,7 +10,9 @@ function SearchBar({ onSearch }) {
   };
 
   const handleSearchClick = () => {
-    onSearch(city);
+    const trimmedCity = city.trim(); // Remove extra spaces
+    if (trimmedCity === "") return; // Prevent empty search
+    onSearch(trimmedCity);
     setCity("");
   };
 

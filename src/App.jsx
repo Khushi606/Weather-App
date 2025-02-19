@@ -26,7 +26,7 @@ const App = () => {
   };
 
   const handleSearch = (searchedCity) => {
-    setCity(searchedCity);
+    setCity(searchedCity.trim()); // Remove extra spaces from city
     setError(null); // Clear previous errors
     setWeatherData(null); // Reset data on new search
     setForecastData(null);
