@@ -45,13 +45,12 @@ const App = () => {
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${
     import.meta.env.VITE_APP_ID
   }`;
-  const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 
   useEffect(() => {
     const fetchWeatherData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(proxyUrl + url);
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error("City not found");
         }
@@ -62,7 +61,7 @@ const App = () => {
         const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${
           import.meta.env.VITE_APP_ID
         }`;
-        const forecastResponse = await fetch(proxyUrl + forecastUrl);
+        const forecastResponse = await fetch(forecastUrl);
         if (!forecastResponse.ok) {
           throw new Error("Forecast data not found"); // Handle forecast errors
         }
